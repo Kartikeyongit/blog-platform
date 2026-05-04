@@ -6,7 +6,7 @@ A modern, full-featured blog platform built with Next.js, Prisma, and PostgreSQL
 
 ## 🚀 Live Demo
 
-[https://blog-platform.vercel.app](https://blog-platform.vercel.app)
+[https://blog-platform.vercel.app](https://blog-platform-ld080t731-kartikey-gautams-projects.vercel.app)
 
 ## ✨ Features
 
