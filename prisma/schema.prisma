@@ -1,0 +1,203 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  READER
+  AUTHOR
+  ADMIN
+}
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  role          Role      @default(READER)
+  bio           String?
+  website       String?
+  
+  posts         Post[]
+  comments      Comment[]
+  likes         Like[]
+  sessions      Session[]
+  accounts      Account[]
+  newsletterSub NewsletterSub?
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Post {
+  id            String     @id @default(cuid())
+  title         String
+  slug          String     @unique
+  content       String     @db.Text
+  excerpt       String?
+  coverImage    String?
+  status        PostStatus @default(DRAFT)
+  featured      Boolean    @default(false)
+  views         Int        @default(0)
+  readingTime   Int?
+  
+  author        User       @relation(fields: [authorId], references: [id])
+  authorId      String
+  category      Category?  @relation(fields: [categoryId], references: [id])
+  categoryId    String?
+  tags          TagOnPost[]
+  comments      Comment[]
+  likes         Like[]
+  seo           SEO?
+  
+  publishedAt   DateTime?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  
+  @@index([slug])
+  @@index([status])
+  @@index([authorId])
+}
+
+model Category {
+  id          String @id @default(cuid())
+  name        String @unique
+  slug        String @unique
+  description String?
+  
+  posts       Post[]
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Tag {
+  id          String @id @default(cuid())
+  name        String @unique
+  slug        String @unique
+  
+  posts       TagOnPost[]
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model TagOnPost {
+  post        Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId      String
+  tag         Tag @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  tagId       String
+  
+  @@id([postId, tagId])
+}
+
+model Comment {
+  id          String   @id @default(cuid())
+  content     String   @db.Text
+  status      String   @default("PENDING")
+  
+  author      User     @relation(fields: [authorId], references: [id])
+  authorId    String
+  post        Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId      String
+  parent      Comment? @relation("CommentReplies", fields: [parentId], references: [id])
+  parentId    String?
+  replies     Comment[] @relation("CommentReplies")
+  likes       Like[]    // ADDED THIS LINE - missing opposite relation
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([postId])
+  @@index([authorId])
+}
+
+model Like {
+  id        String @id @default(cuid())
+  
+  user      User   @relation(fields: [userId], references: [id])
+  userId    String
+  post      Post?  @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    String?
+  comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  commentId String?
+  
+  createdAt DateTime @default(now())
+  
+  @@unique([userId, postId])
+  @@unique([userId, commentId])
+}
+
+model SEO {
+  id            String  @id @default(cuid())
+  title         String?
+  description   String?
+  keywords      String?
+  ogImage       String?
+  
+  post          Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId        String  @unique
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model NewsletterSub {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  active        Boolean  @default(true)
+  confirmedAt   DateTime?
+  
+  user          User?    @relation(fields: [userId], references: [id])
+  userId        String?  @unique
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}

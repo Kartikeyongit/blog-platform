@@ -1,0 +1,255 @@
+@import "tailwindcss";
+
+/* Custom Animations */
+/* Moving Gradient for Logo */
+@keyframes logo-gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-logo {
+  background-size: 200% 200%;
+  animation: logo-gradient 3s ease infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 5px rgba(59, 130, 246, 0.5); }
+  50% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.8); }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Utility Classes */
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.5s ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.5s ease-out;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out;
+}
+
+.gradient-animate {
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease infinite;
+}
+
+/* Glass Effect */
+.glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #d1d5db transparent;
+}
+
+/* Selection */
+::selection {
+  background: rgba(59, 130, 246, 0.2);
+  color: #1e40af;
+}
+
+/* Focus Ring */
+*:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Smooth Transitions */
+* {
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+/* MDEditor Preview List Fix */
+.w-md-editor-preview ol {
+  list-style-type: decimal !important;
+  padding-left: 24px !important;
+  margin: 12px 0 !important;
+}
+
+.w-md-editor-preview ul {
+  list-style-type: disc !important;
+  padding-left: 24px !important;
+  margin: 12px 0 !important;
+}
+
+.w-md-editor-preview li {
+  margin: 4px 0 !important;
+  display: list-item !important;
+}
+
+.w-md-editor-preview ol ol,
+.w-md-editor-preview ul ul {
+  padding-left: 24px !important;
+}
+
+.w-md-editor-preview ol ol {
+  list-style-type: lower-alpha !important;
+}
+
+.w-md-editor-preview ul ul {
+  list-style-type: circle !important;
+}
+
+.w-md-editor-preview img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.w-md-editor-preview table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 16px 0;
+}
+
+.w-md-editor-preview th,
+.w-md-editor-preview td {
+  border: 1px solid #e5e7eb;
+  padding: 8px 12px;
+  text-align: left;
+}
+
+.w-md-editor-preview th {
+  background-color: #f9fafb;
+  font-weight: 600;
+}
+
+/* Blog Post Content Lists */
+.prose ol {
+  list-style-type: decimal !important;
+  padding-left: 1.5em !important;
+  margin: 0.75em 0 !important;
+}
+
+.prose ul {
+  list-style-type: disc !important;
+  padding-left: 1.5em !important;
+  margin: 0.75em 0 !important;
+}
+
+.prose li {
+  margin: 0.25em 0 !important;
+  padding-left: 0.25em !important;
+}
+
+.prose li::marker {
+  color: #6b7280;
+}
+
+.prose ol ol {
+  list-style-type: lower-alpha !important;
+}
+
+.prose ul ul {
+  list-style-type: circle !important;
+}
+
+.prose ol ol ol {
+  list-style-type: lower-roman !important;
+}
+
+.prose ul ul ul {
+  list-style-type: square !important;
+}
+
+.prose p {
+  margin-bottom: 1em;
+}
+
+.wmde-markdown p {
+  white-space: pre-wrap;
+}
+
+/* Code Blocks - Light Mode */
+.prose pre {
+  background-color: #f3f4f6 !important;
+  color: #1f2937 !important;
+  border: 1px solid #e5e7eb !important;
+}
+
+.prose pre code {
+  background: none !important;
+  color: #1f2937 !important;
+  padding: 0 !important;
+}
+
+.prose code {
+  color: #db2777 !important;
+  background-color: #fdf2f8 !important;
+  padding: 2px 6px !important;
+  border-radius: 4px !important;
+  font-size: 0.875em !important;
+}
+
+.prose code::before,
+.prose code::after {
+  content: none !important;
+}
+
+/* Remove any dark prose styles that may exist */
+.prose :where(pre):not(:where([class~="not-prose"] *)) {
+  background-color: #f3f4f6 !important;
+  color: #1f2937 !important;
+}
+
+.prose :where(code):not(:where([class~="not-prose"] *)) {
+  background-color: #fdf2f8 !important;
+  color: #db2777 !important;
+  font-weight: 500 !important;
+}
