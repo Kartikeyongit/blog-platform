@@ -141,13 +141,13 @@ export async function POST(
     }
 
     // Auto-approve comments from admin/authors
-    const autoApprove = session.user.role === "ADMIN" || session.user.role === "AUTHOR"
+    const autoApprove = session.user?.role === "ADMIN" || session.user?.role === "AUTHOR"
 
     const comment = await prisma.comment.create({
       data: {
         content: content.trim(),
         status: autoApprove ? "APPROVED" : "PENDING",
-        authorId: session.user.id,
+        authorId: session.user?.id,
         postId: post.id,
         parentId: parentId || null,
       },

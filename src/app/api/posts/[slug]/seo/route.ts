@@ -10,7 +10,7 @@ export async function PUT(
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session || (session.user.role !== "ADMIN" && session.user.role !== "AUTHOR")) {
+    if (!session || (session.user?.role !== "ADMIN" && session.user?.role !== "AUTHOR")) {
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }
@@ -33,7 +33,7 @@ export async function PUT(
     }
 
     // Check if user is the author or admin
-    if (session.user.role !== "ADMIN" && post.authorId !== session.user.id) {
+    if (session.user?.role !== "ADMIN" && post.authorId !== session.user?.id) {
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }

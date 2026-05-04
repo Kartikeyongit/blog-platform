@@ -36,7 +36,7 @@ export async function POST(
     // Check if already liked
     const existingLike = await prisma.like.findFirst({
       where: {
-        userId: session.user.id,
+        userId: session.user?.id,
         postId: post.id,
       },
     })
@@ -60,7 +60,7 @@ export async function POST(
       // Like
       await prisma.like.create({
         data: {
-          userId: session.user.id,
+          userId: session.user?.id,
           postId: post.id,
         },
       })
@@ -113,7 +113,7 @@ export async function GET(
     if (session?.user) {
       const like = await prisma.like.findFirst({
         where: {
-          userId: session.user.id,
+          userId: session.user?.id,
           postId: post.id,
         },
       })

@@ -29,7 +29,7 @@ export async function GET(
 
     // If not published, only allow author/admin
     if (post.status !== "PUBLISHED") {
-      if (!session || (session.user.role !== "ADMIN" && post.authorId !== session.user.id)) {
+      if (!session || (session.user?.role !== "ADMIN" && post.authorId !== session.user?.id)) {
         return NextResponse.json({ error: "Not found" }, { status: 404 })
       }
     }
@@ -47,7 +47,7 @@ export async function PUT(
 ) {
   try {
     const session = await getServerSession(authOptions)
-    if (!session || (session.user.role !== "ADMIN" && session.user.role !== "AUTHOR")) {
+    if (!session || (session.user?.role !== "ADMIN" && session.user?.role !== "AUTHOR")) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
@@ -59,7 +59,7 @@ export async function PUT(
       return NextResponse.json({ error: "Post not found" }, { status: 404 })
     }
 
-    if (session.user.role !== "ADMIN" && post.authorId !== session.user.id) {
+    if (session.user?.role !== "ADMIN" && post.authorId !== session.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
@@ -90,7 +90,7 @@ export async function DELETE(
 ) {
   try {
     const session = await getServerSession(authOptions)
-    if (!session || (session.user.role !== "ADMIN" && session.user.role !== "AUTHOR")) {
+    if (!session || (session.user?.role !== "ADMIN" && session.user?.role !== "AUTHOR")) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
@@ -101,7 +101,7 @@ export async function DELETE(
       return NextResponse.json({ error: "Post not found" }, { status: 404 })
     }
 
-    if (session.user.role !== "ADMIN" && post.authorId !== session.user.id) {
+    if (session.user?.role !== "ADMIN" && post.authorId !== session.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 

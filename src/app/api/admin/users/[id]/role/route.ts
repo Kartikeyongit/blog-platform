@@ -3,7 +3,6 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "../../../../../../lib/auth"
 import { prisma } from "../../../../../../lib/prisma"
 
-// PUT update user role
 export async function PUT(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -11,7 +10,7 @@ export async function PUT(
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session || session.user.role !== "ADMIN") {
+    if (!session?.user || session.user.role !== "ADMIN") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
@@ -22,7 +21,6 @@ export async function PUT(
       return NextResponse.json({ error: "Invalid role" }, { status: 400 })
     }
 
-    // Prevent changing own role (safety)
     if (id === session.user.id) {
       return NextResponse.json({ error: "Cannot change your own role" }, { status: 400 })
     }

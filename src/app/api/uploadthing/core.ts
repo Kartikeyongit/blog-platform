@@ -9,7 +9,7 @@ export const ourFileRouter = {
   postImage: f({ image: { maxFileSize: "4MB", maxFileCount: 1 } })
     .middleware(async () => {
       const session = await getServerSession(authOptions)
-      if (!session || (session.user.role !== "ADMIN" && session.user.role !== "AUTHOR")) {
+      if (!session || (session.user?.role !== "ADMIN" && session.user?.role !== "AUTHOR")) {
         throw new Error("Unauthorized")
       }
       return { userId: session.user.id }
@@ -22,7 +22,7 @@ export const ourFileRouter = {
   contentImage: f({ image: { maxFileSize: "4MB", maxFileCount: 1 } })
     .middleware(async () => {
       const session = await getServerSession(authOptions)
-      if (!session || (session.user.role !== "ADMIN" && session.user.role !== "AUTHOR")) {
+      if (!session || (session.user?.role !== "ADMIN" && session.user?.role !== "AUTHOR")) {
         throw new Error("Unauthorized")
       }
       return { userId: session.user.id }

@@ -61,7 +61,7 @@ export async function GET(
     if (session?.user) {
       const like = await prisma.like.findFirst({
         where: {
-          userId: session.user.id,
+          userId: session.user?.id,
           postId: post.id,
         },
       })

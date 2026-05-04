@@ -7,7 +7,7 @@ export async function GET(req: Request) {
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session || (session.user.role !== "ADMIN" && session.user.role !== "AUTHOR")) {
+    if (!session || (session.user?.role !== "ADMIN" && session.user?.role !== "AUTHOR")) {
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }
@@ -17,7 +17,7 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url)
     const range = searchParams.get("range") || "30" // days
 
-    const whereAuthor = session.user.role === "ADMIN" ? {} : { authorId: session.user.id }
+    const whereAuthor = session.user?.role === "ADMIN" ? {} : { authorId: session.user?.id }
     const sinceDate = new Date()
     sinceDate.setDate(sinceDate.getDate() - parseInt(range))
 

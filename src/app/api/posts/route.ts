@@ -18,7 +18,7 @@ export async function POST(req: Request) {
   try {
     const session = await getServerSession(authOptions);
     
-    if (!session || session.user.role === "READER") {
+    if (!session || session.user?.role === "READER") {
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }
@@ -43,7 +43,7 @@ export async function POST(req: Request) {
         excerpt: body.excerpt,
         coverImage: body.coverImage,
         status: body.status,
-        authorId: session.user.id,
+        authorId: session.user?.id,
         categoryId: body.categoryId,
         tags: body.tags && body.tags.length > 0 ? {
           create: body.tags.map((tagId: string) => ({
