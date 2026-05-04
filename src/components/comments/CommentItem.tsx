@@ -46,8 +46,8 @@ export default function CommentItem({
         <div className="flex items-start gap-3 mb-3">
           {comment.author.image ? (
             <img
-              src={comment.author.image}
-              alt={comment.author.name}
+              src={comment.author.image || ""}
+              alt={comment.author.name || "User"}
               className="w-10 h-10 rounded-full object-cover flex-shrink-0"
             />
           ) : (

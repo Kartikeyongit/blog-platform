@@ -10,7 +10,8 @@ export async function PUT(
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session?.user || session.user.role !== "ADMIN") {
+    const userRole = (session?.user as any)?.role
+    if (!session || userRole !== "ADMIN") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
@@ -21,7 +22,8 @@ export async function PUT(
       return NextResponse.json({ error: "Invalid role" }, { status: 400 })
     }
 
-    if (id === session.user.id) {
+    const userId = (session?.user as any)?.id
+    if (id === userId) {
       return NextResponse.json({ error: "Cannot change your own role" }, { status: 400 })
     }
 

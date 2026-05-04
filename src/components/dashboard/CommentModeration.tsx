@@ -9,8 +9,8 @@ interface Comment {
   id: string
   content: string
   status: string
-  createdAt: string
-  author: { name?: string | null; email?: string | null }
+  createdAt: Date | string
+  author: { name?: string | null; email?: string | null; image?: string | null }
   post: { title: string; slug: string }
 }
 
