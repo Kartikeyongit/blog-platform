@@ -1,14 +1,22 @@
 import PostCard from "../../../components/blog/PostCard"
 import { notFound } from "next/navigation"
+import { prisma } from "../../../lib/prisma"
 
 async function getCategoryPosts(slug: string) {
   try {
-    const baseUrl = process.env.NEXTAUTH_URL || process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
-    const res = await fetch(`${baseUrl}/api/public/posts?category=${slug}&limit=12`, {
-      cache: "no-store"
+    const posts = await prisma.post.findMany({
+      where: { status: "PUBLISHED", category: { slug } },
+      take: 12,
+      orderBy: { publishedAt: "desc" },
+      include: {
+        author: { select: { name: true, image: true } },
+        category: true,
+        tags: { include: { tag: true } },
+        _count: { select: { comments: true, likes: true } },
+      },
     })
-    if (!res.ok) return null
-    return res.json()
+    const total = await prisma.post.count({ where: { status: "PUBLISHED", category: { slug } } })
+    return { posts, pagination: { total } }
   } catch (error) {
     return null
   }

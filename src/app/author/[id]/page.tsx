@@ -3,15 +3,32 @@ import { notFound } from "next/navigation"
 import { Calendar, Globe, FileText, MessageSquare, Heart, ArrowLeft } from "lucide-react"
 import { format } from "date-fns"
 import PostCard from "../../../components/blog/PostCard"
+import { prisma } from "../../../lib/prisma"
 
 async function getAuthor(id: string) {
   try {
-    const baseUrl = process.env.NEXTAUTH_URL || process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
-    const res = await fetch(`${baseUrl}/api/authors/${id}`, {
-      cache: "no-store"
+    const user = await prisma.user.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        name: true,
+        image: true,
+        bio: true,
+        website: true,
+        role: true,
+        createdAt: true,
+        posts: {
+          where: { status: "PUBLISHED" },
+          orderBy: { publishedAt: "desc" },
+          include: {
+            category: true,
+            _count: { select: { comments: true, likes: true } },
+          },
+        },
+        _count: { select: { posts: true, comments: true } },
+      },
     })
-    if (!res.ok) return null
-    return res.json()
+    return user
   } catch (error) {
     return null
   }

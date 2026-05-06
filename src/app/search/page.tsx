@@ -1,15 +1,29 @@
 import PostCard from "../../components/blog/PostCard"
 import { Search } from "lucide-react"
 import Link from "next/link"
+import { prisma } from "../../lib/prisma"
 
 async function searchPosts(query: string) {
   try {
-    const baseUrl = process.env.NEXTAUTH_URL || process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
-    const res = await fetch(`${baseUrl}/api/public/posts?search=${encodeURIComponent(query)}&limit=12`, {
-      cache: "no-store"
+    const posts = await prisma.post.findMany({
+      where: {
+        status: "PUBLISHED",
+        OR: [
+          { title: { contains: query, mode: "insensitive" } },
+          { content: { contains: query, mode: "insensitive" } },
+          { excerpt: { contains: query, mode: "insensitive" } },
+        ],
+      },
+      take: 12,
+      orderBy: { publishedAt: "desc" },
+      include: {
+        author: { select: { name: true, image: true } },
+        category: true,
+        tags: { include: { tag: true } },
+        _count: { select: { comments: true, likes: true } },
+      },
     })
-    if (!res.ok) return { posts: [], pagination: { total: 0 } }
-    return res.json()
+    return { posts, pagination: { total: posts.length } }
   } catch (error) {
     return { posts: [], pagination: { total: 0 } }
   }

@@ -6,6 +6,7 @@ import Newsletter from "../components/Newsletter"
 import { Search, TrendingUp, Users, BookOpen, ArrowRight, Clock } from "lucide-react"
 import type { Metadata } from "next"
 import { generateMetadata } from "../lib/seo"
+import { prisma } from "../lib/prisma"
 
 export const metadata: Metadata = generateMetadata({
   title: "Home",
@@ -14,12 +15,19 @@ export const metadata: Metadata = generateMetadata({
 
 async function getPosts() {
   try {
-    const baseUrl = process.env.NEXTAUTH_URL || process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
-    const res = await fetch(`${baseUrl}/api/public/posts?limit=6`, {
-      cache: "no-store"
+    const posts = await prisma.post.findMany({
+      where: { status: "PUBLISHED" },
+      take: 6,
+      orderBy: { publishedAt: "desc" },
+      include: {
+        author: { select: { name: true, image: true } },
+        category: true,
+        tags: { include: { tag: true } },
+        _count: { select: { comments: true, likes: true } },
+      },
     })
-    if (!res.ok) throw new Error("Failed to fetch")
-    return res.json()
+    const total = await prisma.post.count({ where: { status: "PUBLISHED" } })
+    return { posts, pagination: { total, page: 1, limit: 6, totalPages: Math.ceil(total / 6) } }
   } catch (error) {
     return { posts: [], pagination: { total: 0 } }
   }
@@ -27,12 +35,16 @@ async function getPosts() {
 
 async function getFeaturedPosts() {
   try {
-    const baseUrl = process.env.NEXTAUTH_URL || process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
-    const res = await fetch(`${baseUrl}/api/public/posts?featured=true&limit=3`, {
-      cache: "no-store"
+    const posts = await prisma.post.findMany({
+      where: { status: "PUBLISHED", featured: true },
+      take: 3,
+      orderBy: { publishedAt: "desc" },
+      include: {
+        author: { select: { name: true, image: true } },
+        category: true,
+      },
     })
-    if (!res.ok) throw new Error("Failed to fetch")
-    return res.json()
+    return { posts }
   } catch (error) {
     return { posts: [] }
   }
@@ -40,12 +52,19 @@ async function getFeaturedPosts() {
 
 async function getCategories() {
   try {
-    const baseUrl = process.env.NEXTAUTH_URL || process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
-    const res = await fetch(`${baseUrl}/api/categories`, {
-      cache: "no-store"
+    const categories = await prisma.category.findMany({
+      orderBy: { name: "asc" },
+      include: {
+        _count: {
+          select: {
+            posts: {
+              where: { status: "PUBLISHED" },
+            },
+          },
+        },
+      },
     })
-    if (!res.ok) throw new Error("Failed to fetch")
-    return res.json()
+    return categories
   } catch (error) {
     return []
   }
