@@ -8,6 +8,8 @@ import BookmarkButton from "../../../components/blog/BookmarkButton"
 import CommentSection from "../../../components/comments/CommentSection"
 import MarkdownRenderer from "../../../components/blog/MarkdownRenderer"
 
+export const dynamic = 'force-dynamic'
+
 async function getPost(slug: string) {
   try {
     const post = await prisma.post.findUnique({

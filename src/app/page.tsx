@@ -8,6 +8,9 @@ import type { Metadata } from "next"
 import { generateMetadata } from "../lib/seo"
 import { prisma } from "../lib/prisma"
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export const metadata: Metadata = generateMetadata({
   title: "Home",
   description: "Discover stories, thinking, and expertise from writers on technology, programming, and design.",
