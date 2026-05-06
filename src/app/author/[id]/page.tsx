@@ -64,7 +64,7 @@ export default async function AuthorPage({
             {author.image ? (
               <img
                 src={author.image}
-                alt={author.name}
+                alt={author.name || ""}
                 className="w-24 h-24 rounded-full object-cover ring-4 ring-white/20 flex-shrink-0"
               />
             ) : (
