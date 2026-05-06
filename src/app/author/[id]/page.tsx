@@ -6,7 +6,8 @@ import PostCard from "../../../components/blog/PostCard"
 
 async function getAuthor(id: string) {
   try {
-    const res = await fetch(`/api/authors/${id}`, {
+    const baseUrl = process.env.NEXTAUTH_URL || process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+    const res = await fetch(`${baseUrl}/api/authors/${id}`, {
       cache: "no-store"
     })
     if (!res.ok) return null

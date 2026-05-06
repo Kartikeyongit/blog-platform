@@ -14,7 +14,8 @@ export const metadata: Metadata = generateMetadata({
 
 async function getPosts() {
   try {
-    const res = await fetch(`/api/public/posts?limit=6`, {
+    const baseUrl = process.env.NEXTAUTH_URL || process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+    const res = await fetch(`${baseUrl}/api/public/posts?limit=6`, {
       cache: "no-store"
     })
     if (!res.ok) throw new Error("Failed to fetch")
@@ -26,7 +27,8 @@ async function getPosts() {
 
 async function getFeaturedPosts() {
   try {
-    const res = await fetch(`/api/public/posts?featured=true&limit=3`, {
+    const baseUrl = process.env.NEXTAUTH_URL || process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+    const res = await fetch(`${baseUrl}/api/public/posts?featured=true&limit=3`, {
       cache: "no-store"
     })
     if (!res.ok) throw new Error("Failed to fetch")
@@ -38,7 +40,8 @@ async function getFeaturedPosts() {
 
 async function getCategories() {
   try {
-    const res = await fetch(`/api/categories`, {
+    const baseUrl = process.env.NEXTAUTH_URL || process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+    const res = await fetch(`${baseUrl}/api/categories`, {
       cache: "no-store"
     })
     if (!res.ok) throw new Error("Failed to fetch")

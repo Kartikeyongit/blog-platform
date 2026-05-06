@@ -3,7 +3,8 @@ import { notFound } from "next/navigation"
 
 async function getCategoryPosts(slug: string) {
   try {
-    const res = await fetch(`/api/public/posts?category=${slug}&limit=12`, {
+    const baseUrl = process.env.NEXTAUTH_URL || process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+    const res = await fetch(`${baseUrl}/api/public/posts?category=${slug}&limit=12`, {
       cache: "no-store"
     })
     if (!res.ok) return null
