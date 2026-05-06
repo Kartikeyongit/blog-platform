@@ -14,7 +14,7 @@ export const metadata: Metadata = generateMetadata({
 
 async function getPosts() {
   try {
-    const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000"
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXTAUTH_URL || "https://blog-platform.vercel.app"
     const res = await fetch(`${baseUrl}/api/public/posts?limit=6`, {
       cache: "no-store"
     })
@@ -27,7 +27,7 @@ async function getPosts() {
 
 async function getFeaturedPosts() {
   try {
-    const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000"
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXTAUTH_URL || "https://blog-platform.vercel.app"
     const res = await fetch(`${baseUrl}/api/public/posts?featured=true&limit=3`, {
       cache: "no-store"
     })
@@ -40,7 +40,7 @@ async function getFeaturedPosts() {
 
 async function getCategories() {
   try {
-    const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000"
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXTAUTH_URL || "https://blog-platform.vercel.app"
     const res = await fetch(`${baseUrl}/api/categories`, {
       cache: "no-store"
     })

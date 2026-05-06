@@ -10,7 +10,7 @@ import BookmarkButton from "../../../components/blog/BookmarkButton"
 
 async function getPost(slug: string) {
   try {
-    const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000"
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXTAUTH_URL || "https://blog-platform.vercel.app"
     const res = await fetch(`${baseUrl}/api/public/posts/${slug}`, {
       cache: "no-store"
     })
@@ -40,7 +40,7 @@ export async function generateMetadata({
     title: post.title,
     description: post.excerpt || post.seo?.description,
     image: post.coverImage || post.seo?.ogImage,
-    url: `${process.env.NEXTAUTH_URL || "http://localhost:3000"}/blog/${slug}`,
+    url: `${process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXTAUTH_URL || "https://blog-platform.vercel.app"}/blog/${slug}`,
     type: "article",
     publishedAt: post.publishedAt,
     author: post.author?.name,
