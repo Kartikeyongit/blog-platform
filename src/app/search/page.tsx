@@ -4,8 +4,7 @@ import Link from "next/link"
 
 async function searchPosts(query: string) {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXTAUTH_URL || "https://blog-platform.vercel.app"
-    const res = await fetch(`${baseUrl}/api/public/posts?search=${encodeURIComponent(query)}&limit=12`, {
+    const res = await fetch(`/api/public/posts?search=${encodeURIComponent(query)}&limit=12`, {
       cache: "no-store"
     })
     if (!res.ok) return { posts: [], pagination: { total: 0 } }
